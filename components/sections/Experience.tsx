@@ -79,14 +79,14 @@ export function Experience() {
   const totalYears = experience.reduce((acc, exp) => {
     const [startMonth, startYear] = exp.period.split(" – ")[0].split("/");
     const endDate = exp.period.split(" – ")[1];
-    const [endMonth, endYear] = endDate === "present" 
-      ? [new Date().getMonth() + 1, new Date().getFullYear()]
-      : endDate.split("/");
     
     const start = new Date(parseInt(startYear), parseInt(startMonth) - 1);
     const end = endDate === "present" 
       ? new Date()
-      : new Date(parseInt(endYear), parseInt(endMonth) - 1);
+      : (() => {
+          const [endMonth, endYear] = endDate.split("/");
+          return new Date(parseInt(endYear), parseInt(endMonth) - 1);
+        })();
     
     const years = (end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24 * 365);
     return acc + years;
